@@ -110,6 +110,8 @@
   - [SupportedSchemaVersion](#P-AdaptiveCards-Rendering-AdaptiveCardRendererBase`2-SupportedSchemaVersion 'AdaptiveCards.Rendering.AdaptiveCardRendererBase`2.SupportedSchemaVersion')
   - [GetSupportedSchemaVersion()](#M-AdaptiveCards-Rendering-AdaptiveCardRendererBase`2-GetSupportedSchemaVersion 'AdaptiveCards.Rendering.AdaptiveCardRendererBase`2.GetSupportedSchemaVersion')
 - [AdaptiveChoice](#T-AdaptiveCards-AdaptiveChoice 'AdaptiveCards.AdaptiveChoice')
+  - [InlineAction](#P-AdaptiveCards-AdaptiveChoice-InlineAction 'AdaptiveCards.AdaptiveChoice.InlineAction')
+  - [IsEnabled](#P-AdaptiveCards-AdaptiveChoice-IsEnabled 'AdaptiveCards.AdaptiveChoice.IsEnabled')
   - [IsSelected](#P-AdaptiveCards-AdaptiveChoice-IsSelected 'AdaptiveCards.AdaptiveChoice.IsSelected')
   - [Speak](#P-AdaptiveCards-AdaptiveChoice-Speak 'AdaptiveCards.AdaptiveChoice.Speak')
   - [Title](#P-AdaptiveCards-AdaptiveChoice-Title 'AdaptiveCards.AdaptiveChoice.Title')
@@ -135,6 +137,15 @@
   - [StyleXml](#P-AdaptiveCards-AdaptiveCollectionElement-StyleXml 'AdaptiveCards.AdaptiveCollectionElement.StyleXml')
   - [VerticalContentAlignment](#P-AdaptiveCards-AdaptiveCollectionElement-VerticalContentAlignment 'AdaptiveCards.AdaptiveCollectionElement.VerticalContentAlignment')
   - [ShouldSerializeStyleXml()](#M-AdaptiveCards-AdaptiveCollectionElement-ShouldSerializeStyleXml 'AdaptiveCards.AdaptiveCollectionElement.ShouldSerializeStyleXml')
+- [AdaptiveColorInput](#T-AdaptiveCards-AdaptiveColorInput 'AdaptiveCards.AdaptiveColorInput')
+  - [TypeName](#F-AdaptiveCards-AdaptiveColorInput-TypeName 'AdaptiveCards.AdaptiveColorInput.TypeName')
+  - [MaxLength](#P-AdaptiveCards-AdaptiveColorInput-MaxLength 'AdaptiveCards.AdaptiveColorInput.MaxLength')
+  - [Placeholder](#P-AdaptiveCards-AdaptiveColorInput-Placeholder 'AdaptiveCards.AdaptiveColorInput.Placeholder')
+  - [Regex](#P-AdaptiveCards-AdaptiveColorInput-Regex 'AdaptiveCards.AdaptiveColorInput.Regex')
+  - [Style](#P-AdaptiveCards-AdaptiveColorInput-Style 'AdaptiveCards.AdaptiveColorInput.Style')
+  - [Type](#P-AdaptiveCards-AdaptiveColorInput-Type 'AdaptiveCards.AdaptiveColorInput.Type')
+  - [Value](#P-AdaptiveCards-AdaptiveColorInput-Value 'AdaptiveCards.AdaptiveColorInput.Value')
+  - [GetNonInteractiveValue()](#M-AdaptiveCards-AdaptiveColorInput-GetNonInteractiveValue 'AdaptiveCards.AdaptiveColorInput.GetNonInteractiveValue')
 - [AdaptiveColumn](#T-AdaptiveCards-AdaptiveColumn 'AdaptiveCards.AdaptiveColumn')
   - [TypeName](#F-AdaptiveCards-AdaptiveColumn-TypeName 'AdaptiveCards.AdaptiveColumn.TypeName')
   - [Rtl](#P-AdaptiveCards-AdaptiveColumn-Rtl 'AdaptiveCards.AdaptiveColumn.Rtl')
@@ -237,6 +248,15 @@
   - [Get(feature)](#M-AdaptiveCards-AdaptiveFeatureRegistration-Get-System-String- 'AdaptiveCards.AdaptiveFeatureRegistration.Get(System.String)')
   - [Remove(feature)](#M-AdaptiveCards-AdaptiveFeatureRegistration-Remove-System-String- 'AdaptiveCards.AdaptiveFeatureRegistration.Remove(System.String)')
   - [Set(feature,version)](#M-AdaptiveCards-AdaptiveFeatureRegistration-Set-System-String,System-String- 'AdaptiveCards.AdaptiveFeatureRegistration.Set(System.String,System.String)')
+- [AdaptiveFileInput](#T-AdaptiveCards-AdaptiveFileInput 'AdaptiveCards.AdaptiveFileInput')
+  - [TypeName](#F-AdaptiveCards-AdaptiveFileInput-TypeName 'AdaptiveCards.AdaptiveFileInput.TypeName')
+  - [MaxLength](#P-AdaptiveCards-AdaptiveFileInput-MaxLength 'AdaptiveCards.AdaptiveFileInput.MaxLength')
+  - [Placeholder](#P-AdaptiveCards-AdaptiveFileInput-Placeholder 'AdaptiveCards.AdaptiveFileInput.Placeholder')
+  - [Regex](#P-AdaptiveCards-AdaptiveFileInput-Regex 'AdaptiveCards.AdaptiveFileInput.Regex')
+  - [Style](#P-AdaptiveCards-AdaptiveFileInput-Style 'AdaptiveCards.AdaptiveFileInput.Style')
+  - [Type](#P-AdaptiveCards-AdaptiveFileInput-Type 'AdaptiveCards.AdaptiveFileInput.Type')
+  - [Value](#P-AdaptiveCards-AdaptiveFileInput-Value 'AdaptiveCards.AdaptiveFileInput.Value')
+  - [GetNonInteractiveValue()](#M-AdaptiveCards-AdaptiveFileInput-GetNonInteractiveValue 'AdaptiveCards.AdaptiveFileInput.GetNonInteractiveValue')
 - [AdaptiveFontType](#T-AdaptiveCards-AdaptiveFontType 'AdaptiveCards.AdaptiveFontType')
   - [Default](#F-AdaptiveCards-AdaptiveFontType-Default 'AdaptiveCards.AdaptiveFontType.Default')
   - [Monospace](#F-AdaptiveCards-AdaptiveFontType-Monospace 'AdaptiveCards.AdaptiveFontType.Monospace')
@@ -1754,6 +1774,20 @@ AdaptiveCards
 
 Choice as part of a Input.AdaptiveChoiceSetInput element
 
+<a name='P-AdaptiveCards-AdaptiveChoice-InlineAction'></a>
+### InlineAction `property`
+
+##### Summary
+
+[AdaptiveAction](#T-AdaptiveCards-AdaptiveAction 'AdaptiveCards.AdaptiveAction') to invoke inline.
+
+<a name='P-AdaptiveCards-AdaptiveChoice-IsEnabled'></a>
+### IsEnabled `property`
+
+##### Summary
+
+Is this input enabled ?
+
 <a name='P-AdaptiveCards-AdaptiveChoice-IsSelected'></a>
 ### IsSelected `property`
 
@@ -1944,6 +1978,77 @@ The content alignment for the element inside the container.
 ##### Summary
 
 Determines whether to serialize the style for XML.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='T-AdaptiveCards-AdaptiveColorInput'></a>
+## AdaptiveColorInput `type`
+
+##### Namespace
+
+AdaptiveCards
+
+##### Summary
+
+Represents an Input.Text element.
+
+<a name='F-AdaptiveCards-AdaptiveColorInput-TypeName'></a>
+### TypeName `constants`
+
+##### Summary
+
+*Inherit from parent.*
+
+<a name='P-AdaptiveCards-AdaptiveColorInput-MaxLength'></a>
+### MaxLength `property`
+
+##### Summary
+
+Hint of maximum number of characters to collect (may be ignored by some clients).
+
+<a name='P-AdaptiveCards-AdaptiveColorInput-Placeholder'></a>
+### Placeholder `property`
+
+##### Summary
+
+Placeholder text to display when the input is empty.
+
+<a name='P-AdaptiveCards-AdaptiveColorInput-Regex'></a>
+### Regex `property`
+
+##### Summary
+
+Regular expression used for validating the input.
+
+<a name='P-AdaptiveCards-AdaptiveColorInput-Style'></a>
+### Style `property`
+
+##### Summary
+
+Hint of style of input, if client doesn't support the style it will become simple text input.
+
+<a name='P-AdaptiveCards-AdaptiveColorInput-Type'></a>
+### Type `property`
+
+##### Summary
+
+*Inherit from parent.*
+
+<a name='P-AdaptiveCards-AdaptiveColorInput-Value'></a>
+### Value `property`
+
+##### Summary
+
+The initial value for the field.
+
+<a name='M-AdaptiveCards-AdaptiveColorInput-GetNonInteractiveValue'></a>
+### GetNonInteractiveValue() `method`
+
+##### Summary
+
+*Inherit from parent.*
 
 ##### Parameters
 
@@ -2907,6 +3012,77 @@ Sets (or registers) a feature to a particular version.
 | ---- | ---- | ----------- |
 | feature | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The feature upon which to set a version. |
 | version | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The version to set. |
+
+<a name='T-AdaptiveCards-AdaptiveFileInput'></a>
+## AdaptiveFileInput `type`
+
+##### Namespace
+
+AdaptiveCards
+
+##### Summary
+
+Represents an Input.Text element.
+
+<a name='F-AdaptiveCards-AdaptiveFileInput-TypeName'></a>
+### TypeName `constants`
+
+##### Summary
+
+*Inherit from parent.*
+
+<a name='P-AdaptiveCards-AdaptiveFileInput-MaxLength'></a>
+### MaxLength `property`
+
+##### Summary
+
+Hint of maximum number of characters to collect (may be ignored by some clients).
+
+<a name='P-AdaptiveCards-AdaptiveFileInput-Placeholder'></a>
+### Placeholder `property`
+
+##### Summary
+
+Placeholder text to display when the input is empty.
+
+<a name='P-AdaptiveCards-AdaptiveFileInput-Regex'></a>
+### Regex `property`
+
+##### Summary
+
+Regular expression used for validating the input.
+
+<a name='P-AdaptiveCards-AdaptiveFileInput-Style'></a>
+### Style `property`
+
+##### Summary
+
+Hint of style of input, if client doesn't support the style it will become simple text input.
+
+<a name='P-AdaptiveCards-AdaptiveFileInput-Type'></a>
+### Type `property`
+
+##### Summary
+
+*Inherit from parent.*
+
+<a name='P-AdaptiveCards-AdaptiveFileInput-Value'></a>
+### Value `property`
+
+##### Summary
+
+The initial value for the field.
+
+<a name='M-AdaptiveCards-AdaptiveFileInput-GetNonInteractiveValue'></a>
+### GetNonInteractiveValue() `method`
+
+##### Summary
+
+*Inherit from parent.*
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='T-AdaptiveCards-AdaptiveFontType'></a>
 ## AdaptiveFontType `type`

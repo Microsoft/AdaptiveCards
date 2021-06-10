@@ -45,6 +45,22 @@ namespace AdaptiveCards
         public bool IsSelected { get; set; } = false;
 
         /// <summary>
+        ///     Is this input enabled ?
+        /// </summary>
+        [DefaultValue(true)]
+        public bool IsEnabled { get; set; } = true;
+
+        /// <summary>
+        /// <see cref="AdaptiveAction"/> to invoke inline.
+        /// </summary>
+        [JsonProperty("inlineAction", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+#if !NETSTANDARD1_3
+        [XmlElement(typeof(AdaptiveToggleVisibilityAction))]
+        [XmlElement(typeof(AdaptiveUnknownAction))]
+#endif
+        public AdaptiveAction InlineAction { get; set; }
+
+        /// <summary>
         ///     (OPTIONAL) Speech description of the choice
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

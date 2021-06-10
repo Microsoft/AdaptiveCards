@@ -2954,6 +2954,183 @@ export class TextInput extends Input {
     }
 }
 
+export class FileResult extends SerializableObject {
+    //#region Schema
+
+    static readonly fileNameProperty = new StringProperty(Versions.v1_0, "fileName");
+    static readonly contentProperty  = new StringProperty(Versions.v1_0, "content");
+
+    @property(FileResult.fileNameProperty)
+    fileName?: string;
+
+    @property(FileResult.contentProperty)
+    content?: string;
+
+    //#endregion
+
+    protected getSchemaKey(): string {
+        return "FileResult";
+    }
+
+    constructor(fileName?: string, content?: string) {
+        super();
+
+        this.fileName = fileName;
+        this.content = content;
+    }
+}
+
+export class FileInput extends Input {
+    //#region Schema
+
+    static readonly valueProperty = new SerializableObjectProperty(Versions.v1_0, "value", FileResult);
+    static readonly maxLengthProperty = new NumProperty(Versions.v1_0, "maxLength");
+    static readonly placeholderProperty = new StringProperty(Versions.v1_0, "placeholder");
+    static readonly regexProperty = new StringProperty(Versions.v1_3, "regex", true);
+
+    @property(FileInput.valueProperty)
+    defaultValue?: FileResult;
+
+    @property(FileInput.maxLengthProperty)
+    maxLength?: number;
+
+    @property(FileInput.placeholderProperty)
+    placeholder?: string;
+
+    @property(FileInput.regexProperty)
+    regex?: string;
+
+    //#endregion
+
+    private setupInput(input: HTMLInputElement) {
+        input.style.flex = "1 1 auto";
+        input.tabIndex = 0;
+
+        if (this.placeholder) {
+            input.placeholder = this.placeholder;
+            input.setAttribute("aria-label", this.placeholder)
+        }
+
+        if (this.maxLength && this.maxLength > 0) {
+            input.maxLength = this.maxLength;
+        }
+
+        input.oninput = () => {
+            this.valueChanged();
+
+            let fileName = (<HTMLInputElement>this.renderedInputControlElement).value;
+
+            let file = (<HTMLInputElement>this.renderedInputControlElement).files?.item(0) as File;
+
+            let fileReader = new FileReader();
+            fileReader.onload = () => {
+                let content = fileReader.result as string;
+                this.defaultValue = new FileResult(fileName, content);
+            }
+            fileReader.readAsDataURL(file);
+        }
+    }
+
+    protected internalRender(): HTMLElement | undefined {
+        let result: HTMLInputElement;
+
+        result = document.createElement("input");
+        result.className = this.hostConfig.makeCssClassName("ac-input", "ac-textInput");
+        result.type = "file";
+
+        this.setupInput(result);
+
+        return result;
+    }
+
+    getJsonTypeName(): string {
+        return "Input.File";
+    }
+
+    isSet(): boolean {
+        return this.value ? true : false;
+    }
+
+    get value(): string | undefined {
+        if (this.defaultValue) {
+            return JSON.stringify(this.defaultValue, undefined, 4);
+        }
+        else {
+            return undefined;
+        }
+    }
+}
+
+export class ColorInput extends Input {
+    //#region Schema
+
+    static readonly valueProperty = new StringProperty(Versions.v1_0, "value");
+    static readonly maxLengthProperty = new NumProperty(Versions.v1_0, "maxLength");
+    static readonly placeholderProperty = new StringProperty(Versions.v1_0, "placeholder");
+    static readonly regexProperty = new StringProperty(Versions.v1_3, "regex", true);
+
+    @property(ColorInput.valueProperty)
+    defaultValue?: string;
+
+    @property(ColorInput.maxLengthProperty)
+    maxLength?: number;
+
+    @property(ColorInput.placeholderProperty)
+    placeholder?: string;
+
+    @property(ColorInput.regexProperty)
+    regex?: string;
+
+    //#endregion
+
+    private setupInput(input: HTMLInputElement) {
+        input.style.flex = "1 1 auto";
+        input.tabIndex = 0;
+        input.oninput = () => { this.valueChanged(); }
+    }
+
+    protected internalRender(): HTMLElement | undefined {
+        let result: HTMLInputElement;
+
+        result = document.createElement("input");
+        result.className = this.hostConfig.makeCssClassName("ac-input", "ac-textInput");
+        result.type = "color";
+
+        this.setupInput(result);
+
+        return result;
+    }
+
+    getJsonTypeName(): string {
+        return "Input.Color";
+    }
+
+    isSet(): boolean {
+        return this.value ? true : false;
+    }
+
+    isValid(): boolean {
+        if (!this.value) {
+            return true;
+        }
+
+        if (this.regex) {
+            return new RegExp(this.regex, "g").test(this.value);
+        }
+
+        return true;
+    }
+
+    get value(): string | undefined {
+        if (this.renderedInputControlElement) {
+            return (<HTMLInputElement>this.renderedInputControlElement).value;
+        }
+        else {
+            return undefined;
+        }
+    }
+}
+
 export class ToggleInput extends Input {
     //#region Schema
 
@@ -3099,6 +3276,16 @@ export class Choice extends SerializableObject {
 
     static readonly titleProperty = new StringProperty(Versions.v1_0, "title");
     static readonly valueProperty = new StringProperty(Versions.v1_0, "value");
+    static readonly isEnabledProperty = new BoolProperty(Versions.v1_0, "isEnabled", true);
+    static readonly inlineActionProperty = new ActionProperty(
+        Versions.v1_0,
+        "inlineAction",
+        [
+            "Action.ShowCard",
+            "Action.Submit",
+            "Action.OpenUrl",
+            "Action.Execute"
+        ]);
 
     @property(Choice.titleProperty)
     title?: string;
@@ -3106,17 +3293,29 @@ export class Choice extends SerializableObject {
     @property(Choice.valueProperty)
     value?: string;
 
+    @property(Choice.isEnabledProperty)
+    isEnabled?: boolean;
+
+    @property(Choice.inlineActionProperty)
+    inlineAction?: ToggleVisibilityAction;
+
     //#endregion
 
     protected getSchemaKey(): string {
         return "Choice";
     }
 
-    constructor(title?: string, value?: string) {
+    protected isDesignMode(): boolean {
+        return false;
+    }
+
+    constructor(title?: string, value?: string, isEnabled?: boolean, inlineAction?: ToggleVisibilityAction) {
         super();
 
         this.title = title;
         this.value = value;
+        this.isEnabled = isEnabled;
+        this.inlineAction = inlineAction;
     }
 }
 
@@ -3212,6 +3411,7 @@ export class ChoiceSetInput extends Input {
             input.style.display = "inline-block";
             input.style.verticalAlign = "middle";
             input.style.flex = "0 0 auto";
+            input.disabled = choice.isEnabled === undefined ? false : !choice.isEnabled;
             input.name = this.id ? this.id : this._uniqueCategoryName;
 
             if (this.isRequired) {
@@ -3232,7 +3432,15 @@ export class ChoiceSetInput extends Input {
                 }
             }
 
-            input.onchange = () => { this.valueChanged(); }
+            input.onchange = () => {
+                this.valueChanged();
+
+                if ((!this.isMultiSelect && input.checked && choice.inlineAction)
+                    || (this.isMultiSelect && choice.inlineAction)) {
+                    choice.inlineAction.setParent(this);
+                    choice.inlineAction.execute();
+                }
+            }
 
             this._toggleInputs.push(input);
 
@@ -7398,6 +7606,8 @@ GlobalRegistry.defaultElements.register("FactSet", FactSet);
 GlobalRegistry.defaultElements.register("ColumnSet", ColumnSet);
 GlobalRegistry.defaultElements.register("ActionSet", ActionSet, Versions.v1_2);
 GlobalRegistry.defaultElements.register("Input.Text", TextInput);
+GlobalRegistry.defaultElements.register("Input.File", FileInput);
+GlobalRegistry.defaultElements.register("Input.Color", ColorInput);
 GlobalRegistry.defaultElements.register("Input.Date", DateInput);
 GlobalRegistry.defaultElements.register("Input.Time", TimeInput);
 GlobalRegistry.defaultElements.register("Input.Number", NumberInput);
