@@ -1,0 +1,72 @@
+# Multi-job configuration must be converted to matrix strategy: https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml#multi-job-configuration
+# Multi-job configuration must be converted to matrix strategy: https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?view=azure-devops&tabs=yaml#multi-job-configuration
+variables:
+  solution: source/uwp/AdaptiveCards.sln
+  buildConfiguration: Release
+  buildPlatform: x64
+
+trigger:
+  branches:
+    include:
+    - main
+    - feature/*
+    - release/*
+    exclude:
+    - release/1.2
+  batch: True
+
+name: $(date:yyMM).$(date:dd)$(rev:rrr)
+
+pool:
+  name: Azure Pipelines
+  vmImage: windows-2019
+
+steps:
+- checkout: self
+  clean: true
+  fetchDepth: 1
+- task: NuGetToolInstaller@0
+  name: NuGetToolInstaller1
+  displayName: Use NuGet 5.x
+  inputs:
+    versionSpec: 5.x
+- task: NuGetRestore@1
+  name: NuGetCommand2
+  displayName: NuGet restore source/uwp/AdaptiveCards.sln
+  inputs:
+    solution: $(solution)
+    verbosity: '-'
+- task: VSBuild@1
+  name: VSBuild3
+  displayName: Build solution source/uwp/AdaptiveCards.sln
+  inputs:
+    solution: $(solution)
+    vsVersion: 16.0
+    msbuildArgs: /p:AppxBundlePlatforms="$(buildPlatform)" /p:AppxPackageDir="$(Build.ArtifactStagingDirectory)\AppxPackages\\" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload
+    platform: $(buildPlatform)
+    configuration: $(buildConfiguration)
+    maximumCpuCount: true
+    createLogFile: true
+    logFileVerbosity: detailed
+- task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+  displayName: 'WinAppDriver - Start'
+  inputs:
+    AgentResolution: 1080p
+- task: VSTest@2
+  displayName: 'VsTest - testAssemblies'
+  inputs:
+    testAssemblyVer2: |
+     **\Release\UWPTestApp.build.appxrecipe
+     !**\obj\**
+    # **\Release\UWPUITestLibrary.dll
+    runInParallel: true
+    runTestsInIsolation: true
+    codeCoverageEnabled: false
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: True
+    collectDumpOn: always
+- task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+  displayName: 'WinAppDriver - Stop'
+  inputs:
+    OperationType: Stop
